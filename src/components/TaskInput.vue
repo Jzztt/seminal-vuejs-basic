@@ -6,15 +6,19 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { useTaskStore } from '@/stores/taskStore'
+import { ref } from 'vue'
+const taskStore = useTaskStore()
+const { createTask } = taskStore
+
 const task = ref({
   title: '',
   status: 'to-do'
 })
-const emit = defineEmits()
+
 const addTask = () => {
   if (task.value.title) {
-    emit('add-task', task.value)
+    createTask(task.value)
     task.value = {
       title: '',
       status: 'to-do'

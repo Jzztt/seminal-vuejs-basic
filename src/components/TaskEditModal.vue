@@ -42,8 +42,13 @@
 </template>
 
 <script setup>
+import { useTaskStore } from '@/stores/taskStore'
 import { X } from 'lucide-vue-next'
 import { ref, watch } from 'vue'
+
+const taskStore = useTaskStore()
+
+const { updateTask } = taskStore
 
 const props = defineProps(['toggleModal', 'showModal', 'task'])
 
@@ -56,7 +61,7 @@ const closeModal = () => {
 }
 const handleSubmit = async () => {
   if (title.value) {
-    await emit('updateTask', { ...props.task, title: title.value })
+    updateTask({ ...props.task, title: title.value })
     closeModal()
   }
 }

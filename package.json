@@ -15,8 +15,10 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "lucide-vue-next": "^0.446.0",
+    "pinia": "^2.2.4",
     "vue": "^3.4.29",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "vue3-toastify": "^0.2.3"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

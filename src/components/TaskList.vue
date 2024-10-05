@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="task in tasks" :key="task.id">
+        <tr v-for="task in taskStore.tasks" :key="task.id">
           <td scope="row">
             <span>{{ task.title }}</span>
           </td>
@@ -22,21 +22,18 @@
         </tr>
       </tbody>
     </table>
-    <TaskEditModal
-      :showModal="showModal"
-      @toggleModal="toggleModal"
-      :task="selectedTask"
-      @updateTask="updateTask"
-    />
+    <TaskEditModal :showModal="showModal" @toggleModal="toggleModal" :task="selectedTask" />
   </div>
 </template>
 
 <script setup>
-import { taskServices } from '@/services/taskServices'
 import { PencilLine, Trash } from 'lucide-vue-next'
 import { ref } from 'vue'
 import TaskEditModal from './TaskEditModal.vue'
-const props = defineProps(['tasks', 'getTasks'])
+import { useTaskStore } from '@/stores/taskStore'
+
+const taskStore = useTaskStore()
+const { updateTask, deleteTask } = taskStore
 
 const showModal = ref(false)
 
@@ -46,21 +43,15 @@ const toggleModal = (status) => {
   showModal.value = status
 }
 const handleDeleteTask = async (id) => {
-  const isComfirmed = window.confirm('Are you sure you want to delete this task?')
-  if (isComfirmed) {
-    await taskServices.deleteTask(id)
-    await props.getTasks()
+  const isConfirmed = window.confirm('Are you sure you want to delete this task?')
+  if (isConfirmed) {
+    await deleteTask(id)
   }
 }
 
 const editTask = (task) => {
   selectedTask.value = task
   toggleModal(true)
-}
-
-const updateTask = async (updateTask) => {
-  await taskServices.updateTask(updateTask)
-  await props.getTasks()
 }
 
 const handleChangeStatus = async (task) => {
@@ -72,8 +63,7 @@ const handleChangeStatus = async (task) => {
     task.status = 'to-do'
   }
 
-  await taskServices.updateTask(task)
-  await props.getTasks()
+  await updateTask(task)
 }
 </script>
 
